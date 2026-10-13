@@ -1,0 +1,24 @@
+services:
+  web:
+    logging: {driver: "none"}
+    image: odoo:17
+    depends_on: [db]
+    ports: ["127.0.0.1:8020:8069"]
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: ${POSTGRES_PASSWORD}
+    command: ["--db-filter=^swm$$", "--without-demo=all", "--smtp=localhost", "--smtp-port=1"]
+    tmpfs: ["/var/lib/odoo:size=400m,uid=101,gid=101"]
+  db:
+    logging: {driver: "none"}
+    image: postgres:16-alpine
+    ports: ["127.0.0.1:54320:5432"]
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: postgres
+    tmpfs: ["/var/lib/postgresql/data:size=1200m"]
+volumes:
+  odoo-data:
+  pg-data:

@@ -1,0 +1,306 @@
+{
+ "A: train InvoiceNinja+Dolibarr": {
+  "same apps, unseen episodes": [
+   {
+    "easy": {
+     "identity": 0.50199203187251,
+     "mean delta": 0.5059760956175299,
+     "action-blind": 0.5139442231075697,
+     "action-conditioned": 0.7131474103585658,
+     "n": 251
+    },
+    "hard": {
+     "identity": 0.058823529411764705,
+     "mean delta": 0.058823529411764705,
+     "action-blind": 0.21568627450980393,
+     "action-conditioned": 0.43137254901960786,
+     "n": 51
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5338645418326693,
+     "mean delta": 0.5338645418326693,
+     "action-blind": 0.549800796812749,
+     "action-conditioned": 0.6972111553784861,
+     "n": 251
+    },
+    "hard": {
+     "identity": 0.058823529411764705,
+     "mean delta": 0.058823529411764705,
+     "action-blind": 0.17647058823529413,
+     "action-conditioned": 0.43137254901960786,
+     "n": 51
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5059760956175299,
+     "mean delta": 0.5059760956175299,
+     "action-blind": 0.5298804780876494,
+     "action-conditioned": 0.7171314741035857,
+     "n": 251
+    },
+    "hard": {
+     "identity": 0.058823529411764705,
+     "mean delta": 0.058823529411764705,
+     "action-blind": 0.21568627450980393,
+     "action-conditioned": 0.4117647058823529,
+     "n": 51
+    }
+   }
+  ],
+  "held-out app (Odoo 17)": [
+   {
+    "easy": {
+     "identity": 0.5595238095238095,
+     "mean delta": 0.5619047619047619,
+     "action-blind": 0.513095238095238,
+     "action-conditioned": 0.5083333333333333,
+     "n": 840
+    },
+    "hard": {
+     "identity": 0.32620320855614976,
+     "mean delta": 0.32486631016042783,
+     "action-blind": 0.3302139037433155,
+     "action-conditioned": 0.33689839572192515,
+     "n": 748
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5404761904761904,
+     "mean delta": 0.5464285714285714,
+     "action-blind": 0.525,
+     "action-conditioned": 0.5119047619047619,
+     "n": 840
+    },
+    "hard": {
+     "identity": 0.3315508021390374,
+     "mean delta": 0.32754010695187163,
+     "action-blind": 0.3342245989304813,
+     "action-conditioned": 0.32887700534759357,
+     "n": 748
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.55,
+     "mean delta": 0.5511904761904762,
+     "action-blind": 0.5119047619047619,
+     "action-conditioned": 0.5023809523809524,
+     "n": 840
+    },
+    "hard": {
+     "identity": 0.3462566844919786,
+     "mean delta": 0.3422459893048128,
+     "action-blind": 0.3195187165775401,
+     "action-conditioned": 0.31684491978609625,
+     "n": 748
+    }
+   }
+  ],
+  "held-out app (Odoo 18)": [
+   {
+    "easy": {
+     "identity": 0.5693333333333334,
+     "mean delta": 0.568,
+     "action-blind": 0.5426666666666666,
+     "action-conditioned": 0.548,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.37209302325581395,
+     "mean delta": 0.375,
+     "action-blind": 0.35319767441860467,
+     "action-conditioned": 0.34593023255813954,
+     "n": 688
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5586666666666666,
+     "mean delta": 0.5586666666666666,
+     "action-blind": 0.5293333333333333,
+     "action-conditioned": 0.5133333333333333,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.36627906976744184,
+     "mean delta": 0.36627906976744184,
+     "action-blind": 0.36773255813953487,
+     "action-conditioned": 0.3372093023255814,
+     "n": 688
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5533333333333333,
+     "mean delta": 0.552,
+     "action-blind": 0.516,
+     "action-conditioned": 0.512,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.35755813953488375,
+     "mean delta": 0.3561046511627907,
+     "action-blind": 0.32994186046511625,
+     "action-conditioned": 0.32848837209302323,
+     "n": 688
+    }
+   }
+  ]
+ },
+ "B: train Odoo 17": {
+  "same app, unseen episodes": [
+   {
+    "easy": {
+     "identity": 0.5748502994011976,
+     "mean delta": 0.5808383233532934,
+     "action-blind": 0.5688622754491018,
+     "action-conditioned": 0.6227544910179641,
+     "n": 167
+    },
+    "hard": {
+     "identity": 0.2323943661971831,
+     "mean delta": 0.2112676056338028,
+     "action-blind": 0.28169014084507044,
+     "action-conditioned": 0.36619718309859156,
+     "n": 142
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5269461077844312,
+     "mean delta": 0.5269461077844312,
+     "action-blind": 0.5089820359281437,
+     "action-conditioned": 0.6706586826347305,
+     "n": 167
+    },
+    "hard": {
+     "identity": 0.21830985915492956,
+     "mean delta": 0.21830985915492956,
+     "action-blind": 0.2323943661971831,
+     "action-conditioned": 0.3380281690140845,
+     "n": 142
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5568862275449101,
+     "mean delta": 0.5568862275449101,
+     "action-blind": 0.5449101796407185,
+     "action-conditioned": 0.6227544910179641,
+     "n": 167
+    },
+    "hard": {
+     "identity": 0.2323943661971831,
+     "mean delta": 0.2323943661971831,
+     "action-blind": 0.24647887323943662,
+     "action-conditioned": 0.33098591549295775,
+     "n": 142
+    }
+   }
+  ],
+  "next version (Odoo 18)": [
+   {
+    "easy": {
+     "identity": 0.5693333333333334,
+     "mean delta": 0.5626666666666666,
+     "action-blind": 0.5373333333333333,
+     "action-conditioned": 0.6426666666666667,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.37209302325581395,
+     "mean delta": 0.37209302325581395,
+     "action-blind": 0.3633720930232558,
+     "action-conditioned": 0.438953488372093,
+     "n": 688
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5586666666666666,
+     "mean delta": 0.5586666666666666,
+     "action-blind": 0.5266666666666666,
+     "action-conditioned": 0.656,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.36627906976744184,
+     "mean delta": 0.3648255813953488,
+     "action-blind": 0.34593023255813954,
+     "action-conditioned": 0.43459302325581395,
+     "n": 688
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.5533333333333333,
+     "mean delta": 0.5533333333333333,
+     "action-blind": 0.5173333333333333,
+     "action-conditioned": 0.6373333333333333,
+     "n": 750
+    },
+    "hard": {
+     "identity": 0.35755813953488375,
+     "mean delta": 0.3561046511627907,
+     "action-blind": 0.35174418604651164,
+     "action-conditioned": 0.42005813953488375,
+     "n": 688
+    }
+   }
+  ],
+  "other apps (IN+Dolibarr)": [
+   {
+    "easy": {
+     "identity": 0.4407894736842105,
+     "mean delta": 0.4399671052631579,
+     "action-blind": 0.4375,
+     "action-conditioned": 0.43256578947368424,
+     "n": 1216
+    },
+    "hard": {
+     "identity": 0.2360655737704918,
+     "mean delta": 0.24043715846994534,
+     "action-blind": 0.23278688524590163,
+     "action-conditioned": 0.253551912568306,
+     "n": 915
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.453125,
+     "mean delta": 0.45230263157894735,
+     "action-blind": 0.44161184210526316,
+     "action-conditioned": 0.43914473684210525,
+     "n": 1216
+    },
+    "hard": {
+     "identity": 0.2174863387978142,
+     "mean delta": 0.2273224043715847,
+     "action-blind": 0.22404371584699453,
+     "action-conditioned": 0.23497267759562843,
+     "n": 915
+    }
+   },
+   {
+    "easy": {
+     "identity": 0.43914473684210525,
+     "mean delta": 0.43832236842105265,
+     "action-blind": 0.4144736842105263,
+     "action-conditioned": 0.4251644736842105,
+     "n": 1216
+    },
+    "hard": {
+     "identity": 0.23387978142076501,
+     "mean delta": 0.2459016393442623,
+     "action-blind": 0.21967213114754097,
+     "action-conditioned": 0.24262295081967214,
+     "n": 915
+    }
+   }
+  ]
+ }
+}

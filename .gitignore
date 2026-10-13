@@ -1,0 +1,9 @@
+.env
+*.sql.gz
+snapshots/
+runs/
+data/
+.venv/
+.tools/
+.hf/
+__pycache__/
