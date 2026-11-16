@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or its results, please cite it."
+title: "software-world-model: do computer-use agents transfer to business software they have never seen?"
+type: software
+authors:
+  - family-names: Joshi
+    given-names: Shubham
+date-released: 2026-11-15
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/shubhamjoshipromail-svg/software-world-model"

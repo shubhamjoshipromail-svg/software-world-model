@@ -1,7 +1,7 @@
 #!/bin/zsh
 # Usage: lane.sh <app> <steps...>   step := luna_clean | uitars_clean | luna_modal | explore
 # Runs steps sequentially against one app database. Env SWM_IN_INST respected for invoiceninja.
-cd ~/software-world-model
+cd "$(dirname "$0")/.." || exit 1
 # Chromium temp profiles go to a RAM disk: on this Mac an OS-update snapshot pins every deleted block on the data volume
 [ -d /Volumes/swmtmp ] && export TMPDIR=/Volumes/swmtmp/
 APP=$1; shift

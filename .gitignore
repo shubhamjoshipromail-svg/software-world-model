@@ -1,9 +1,20 @@
+# secrets and local credentials (templates are *.env.example)
 .env
+# large local artifacts: app snapshots, raw episode logs, exploration data
 *.sql.gz
 snapshots/
 runs/
 data/
+# tooling
 .venv/
 .tools/
 .hf/
 __pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.DS_Store
+# private notes, not part of the release
+docs/OWNERSHIP_GUIDE.md
+launch/

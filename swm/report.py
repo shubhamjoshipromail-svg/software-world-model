@@ -1,8 +1,10 @@
 """Aggregate runs/<model>/<app>/<condition>/results.json into a markdown table + figures.
 
-python -m swm.report  ->  reports/phase0_results.md, reports/fig_success.png, reports/fig_cost.png
+python -m swm.report                                        # from your own runs/
+python -m swm.report --from results/phase0_episodes.jsonl   # from the published episode file (no reruns needed)
+->  reports/phase0_results.md, reports/fig_success.png
 """
-import glob, json, math, os, statistics
+import argparse, glob, json, math, os, statistics
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -30,16 +32,31 @@ def _real(entries):
     return [c for c in entries if not (c["table"].startswith(NOISE_TABLE_PREFIX) or (c.get("cols") and set(c["cols"]) <= NOISE_COLS))]
 
 
-def load():
-    """Read per-episode summaries (robust to batches that were interrupted before writing results.json)."""
-    rows = []
-    for f in glob.glob("runs/*/*/*/*/summary.json"):
-        model, app, cond = f.split("/")[1:4]
-        for r in [json.load(open(f))]:
-            r.update(model=model, app=app, cond=cond, error=False)
-            r["collateral"], r["irreversible"] = _real(r["collateral"]), _real(r["irreversible"])
+def load(source=None):
+    """Read per-episode summaries (robust to batches that were interrupted before writing results.json).
+
+    Returns (rows, superseded). With source=None they come from runs/; otherwise from a JSONL file written by
+    swm.export_results. `superseded` holds the excluded Invoice Ninja episodes used for the sensitivity note.
+    """
+    rows, superseded = [], []
+    if source:
+        for line in open(source):
+            r = json.loads(line)
+            if r.get("superseded"):
+                if (r["superseded"], r["model"], r["app"]) == ("narration_bug", "luna", "invoiceninja"):
+                    superseded.append(r)
+                continue
             rows.append(r)
-    return rows
+    else:
+        for f in glob.glob("runs/*/*/*/*/summary.json"):
+            model, app, cond = f.split("/")[1:4]
+            rows.append({**json.load(open(f)), "model": model, "app": app, "cond": cond})
+        for f in glob.glob("runs/_superseded/narration_bug/luna/invoiceninja/*/*/summary.json"):
+            superseded.append({**json.load(open(f)), "cond": f.split("/")[5]})
+    for r in rows:
+        r["error"] = False
+        r["collateral"], r["irreversible"] = _real(r["collateral"]), _real(r["irreversible"])
+    return rows, superseded
 
 
 def agg(rs):
@@ -60,7 +77,11 @@ def agg(rs):
 
 
 def main():
-    rows = load()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--from", dest="source", default=None, help="episode JSONL from swm.export_results (default: read runs/)")
+    rows, sup = load(ap.parse_args().source)
+    if not rows:
+        raise SystemExit("no episodes found: run `swm run ...` first, or pass --from results/phase0_episodes.jsonl")
     os.makedirs("reports", exist_ok=True)
     groups = {}
     for r in rows:
@@ -88,14 +109,13 @@ def main():
             cells.append(f"{sum(r['success'] for r in x)}/{len(x)}" if x else "—")
         skl.append(f"| {g[0]} | {g[1]} | " + " | ".join(cells) + " |")
     # Sensitivity: Invoice Ninja episodes ended by the (fixed) narration-fallback bug could not be rerun (app removed for disk).
-    sup = [json.load(open(f)) for f in glob.glob("runs/_superseded/narration_bug/luna/invoiceninja/*/*/summary.json")]
     sens = ["", "### Sensitivity: harness bug on Invoice Ninja", "",
             f"{len(sup)} Luna Invoice Ninja episodes were terminated by a harness fallback bug (progress narration wrapped as a final answer); "
             "they could not be rerun after the fix and are **excluded** above. Counting them as failures instead:", ""]
-    for cond in sorted({f.split("/")[5] for f in glob.glob("runs/_superseded/narration_bug/luna/invoiceninja/*/*/summary.json")}):
+    for cond in sorted({r["cond"] for r in sup}):
         g = groups.get(("luna", "invoiceninja", cond), [])
         k = sum(r["success"] for r in g if not r["error"]); n = len([r for r in g if not r["error"]])
-        extra = sum(1 for f in glob.glob(f"runs/_superseded/narration_bug/luna/invoiceninja/{cond}/*/summary.json"))
+        extra = sum(1 for r in sup if r["cond"] == cond)
         sens.append(f"- {cond}: excluded {k}/{n} = {k/n:.0%} -> as-failed {k}/{n+extra} = {k/(n+extra):.0%}")
     skl += sens
     open("reports/phase0_results.md", "w").write("## Phase 0 results\n\n" + "\n".join(lines) + "\n" + "\n".join(skl) + "\n")

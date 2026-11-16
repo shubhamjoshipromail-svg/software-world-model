@@ -6,20 +6,33 @@ from openai import OpenAI
 import os
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-KEYS = dotenv_values(os.path.join(ROOT, ".env"))
+# Settings come from .env in the repo root; real environment variables win.
+KEYS = {**dotenv_values(os.path.join(ROOT, ".env")),
+        **{k: v for k, v in os.environ.items() if k in ("OPENAI_API_KEY", "OPENAI_BASE_URL", "VLLM_API_KEY", "UITARS_URL")}}
 PRICES = {"gpt-6-luna": (0.10, 0.50)}  # $/1M tokens in/out; third-party listed, verify on OpenAI pricing page
 
 
 def make_agent(model, actions, app):
+    """--model accepts:
+      <name>                 any chat model on the OpenAI API, or on OPENAI_BASE_URL if set (vLLM, Ollama, OpenRouter...)
+      uitars:<base_url>      UI-TARS-1.5 served by vLLM, screenshot-only
+      custom:<module>:<Class>  your own agent class, built as Class(actions, app); see docs/ADDING_AN_AGENT.md
+    """
     if model.startswith("uitars:"):
         return UITarsAgent(model.split(":", 1)[1], app)
+    if model.startswith("custom:"):
+        import importlib
+        module, cls = model.split(":", 2)[1:]
+        return getattr(importlib.import_module(module), cls)(actions, app)
     return OpenAIAgent(model, actions, app)
 
 
 class OpenAIAgent:
     def __init__(self, model, actions, app):
         self.model, self.app = model, app
-        self.client = OpenAI(api_key=KEYS["OPENAI_API_KEY"])
+        if not (KEYS.get("OPENAI_API_KEY") or KEYS.get("OPENAI_BASE_URL")):
+            raise SystemExit("No model credentials: copy .env.example to .env and set OPENAI_API_KEY (or OPENAI_BASE_URL).")
+        self.client = OpenAI(api_key=KEYS.get("OPENAI_API_KEY") or "none", base_url=KEYS.get("OPENAI_BASE_URL") or None)
         self.tok_in = self.tok_out = 0
         self.history = []
         self.system = (f"You operate the {app.DISPLAY} web app in a browser on behalf of a bookkeeper.\n"

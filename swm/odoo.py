@@ -59,12 +59,25 @@ def snapshot(name):
     _terminate(DB)
     psql(f'DROP DATABASE IF EXISTS "{tpl}";')
     psql(f'CREATE DATABASE "{tpl}" TEMPLATE "{DB}";')
-    dc("exec", "-T", "web", "sh", "-c", f"rm -rf /var/lib/odoo/filestore/{tpl} && cp -a /var/lib/odoo/filestore/{DB} /var/lib/odoo/filestore/{tpl}",
-       capture_output=True)
+    dc("exec", "-T", "web", "sh", "-c", f"mkdir -p /var/lib/odoo/filestore/{DB} && rm -rf /var/lib/odoo/filestore/{tpl} && "
+                                        f"cp -a /var/lib/odoo/filestore/{DB} /var/lib/odoo/filestore/{tpl}",
+       capture_output=True)  # mkdir: a fresh database has no filestore until its first attachment
+    _export(tpl, name)
     return tpl
 
 
 SNAP_DIR = os.path.join(HERE, "..", "snapshots")
+
+
+def _export(tpl, name):
+    """Copy the template DB and its filestore to snapshots/ on the host. The containers keep data on tmpfs, so
+    this is what lets _ensure_template rebuild the snapshot after a restart."""
+    os.makedirs(SNAP_DIR, exist_ok=True)
+    with open(os.path.join(SNAP_DIR, f"od{VER}_{name}.dump"), "wb") as f:
+        dc("exec", "-T", "db", "pg_dump", "-U", "odoo", "-Fc", tpl, stdout=f)
+    with open(os.path.join(SNAP_DIR, f"od{VER}_{name}_filestore.tgz"), "wb") as f:
+        dc("exec", "-T", "web", "sh", "-c", f"mkdir -p /var/lib/odoo/filestore/{tpl} && tar czf - -C /var/lib/odoo/filestore {tpl}",
+           stdout=f)
 
 
 def _ensure_template(tpl, name):

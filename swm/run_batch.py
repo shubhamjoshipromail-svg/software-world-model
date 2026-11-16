@@ -33,7 +33,7 @@ rows = []
 import shutil, time
 for n, t in enumerate(tasks):
     while shutil.disk_usage("/").free < 0.25e9:  # disk guard: never let MySQL/Postgres run out of space
-        print("disk guard: <1.5GB free, pausing 60s", flush=True); time.sleep(60)
+        print("disk guard: under 250 MB free, pausing 60s", flush=True); time.sleep(60)
     out = f"{out_root}/{t.task_id}"
     if args.skip_done and os.path.exists(f"{out}/summary.json"):
         rows.append(json.load(open(f"{out}/summary.json"))); continue

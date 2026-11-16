@@ -1,12 +1,12 @@
 # Do computer-use agents transfer to business software they've never seen?
 ## Phase 0 report: benchmark, baselines, and a first world-model probe
 
-*Status: internal draft, **not published, no outreach done**. Every number below is regenerated from `runs/` and `data/` by `python -m swm.report`, `python -m swm.taxonomy`, and `python -m swm.track2 train`. Run date: 2026-10-13.*
+*Status: Phase 0 report, first public release 2026-11-15. Every number below is regenerated from `runs/` and `data/` by `python -m swm.report`, `python -m swm.taxonomy`, and `python -m swm.track2 train`. Run date: 2026-10-13.*
 
 ### TL;DR
 1. **Version upgrades break things quietly.** On Odoo 17 → 18, Luna's task success holds (78% → 76%), but collateral damage rises from 15% to 21% and irreversible changes from 6% to 10%. In one recurring pattern, Odoo 18 locks fields on posted invoices. To change a reference, the agent clicks "Reset to Draft", which **silently un-reconciles the customer's payment**. It then re-posts and reports success.
 2. **Success rates hide damage.** "Clean success" (task done *and* nothing else touched) is up to 12 points lower than raw success on Odoo.
-3. **Composition collapses everywhere.** Single-step skills reach up to 100%. The 3-step composite (find the oldest unpaid invoice → pay it → report the new balance) succeeded **0 of 54** times across 4 apps and 2 agents. On Odoo, Luna paid *something* in 15 of 16 runs, but only 6 of those were clean.
+3. **Composition collapses everywhere.** Single-step skills reach up to 100%. The 3-step composite (find the oldest unpaid invoice → pay it → report the new balance) succeeded **0 of 50** times in the clean condition (0 of 66 counting perturbed runs) across 4 apps and 2 agents. On Odoo, Luna paid *something* in 15 of 16 runs, but only 6 of those were clean.
 4. **App identity matters more than "seen vs unseen" for zero-shot agents.** Luna scores 87% on Invoice Ninja, 49% on Dolibarr and 76–78% on Odoo. UI-TARS-1.5-7B scores 8–22% everywhere, and its dominant failure is repeating the same click (stuck loops).
 5. **Track 2 (latent world model).** A small dynamics model trained on **label-free random exploration** predicts state transitions within the same app (+20 to +37 points over "nothing changes") and **transfers across a version upgrade** (Odoo 17 → 18: +7 to +8). It does **not** transfer across apps (about 0). Kill criterion K1 fails for held-out apps at this scale (1–2 training apps, 24 exploration episodes each). The obvious next variable is app diversity.
 
@@ -148,4 +148,4 @@ Setup:
 - **Track 2 limits:** frozen generic encoders, a small MLP, and random (not curiosity-optimal) exploration. A negative cross-app result at this scale says little about larger scale.
 
 ### 8. Reproduce
-See `README.md`. App images are pinned by digest in `envs/image-digests-phase0.txt` and `envs/invoiceninja/image-digests.txt`. Seed snapshots are in `snapshots/`.
+See `README.md`. App images are pinned by digest in `envs/image-digests-phase0.txt` and `envs/invoiceninja/image-digests.txt`. Seed snapshots are rebuilt locally by `swm up <app>` from the fixed-seed generator. Per-episode summaries are in `results/phase0_episodes.jsonl`; `python -m swm.report --from results/phase0_episodes.jsonl` rebuilds the tables without rerunning anything.
